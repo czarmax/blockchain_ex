@@ -1,0 +1,43 @@
+import hashlib
+import datetime
+import json
+
+class Block:
+    def __init__(self, index, time, data, prevhash=""):
+        self.index = index
+        self.time = time
+        self.data = data
+        self.prevhash = prevhash
+        self.hash = self.calc_hash()
+
+    def calc_hash(self):
+        return hashlib.sha256(str(str(self.index) + str(self.time) + self.prevhash +
+                              str(self.data)).encode('utf-8')).hexdigest()
+
+
+class Blockchain:
+    def __init__(self):
+        self.chain = [self.create_genesis_block()]
+
+    def create_genesis_block(self):
+        return Block(0, str(datetime.datetime.now()), "Genesis block", "0")
+
+    def get_latest_block(self):
+        return self.chain[len(self.chain)-1]
+
+    def add_block(self, new_block):
+        new_block.prevhash = self.get_latest_block().hash
+        new_block.hash = new_block.calc_hash()
+        self.chain.append(new_block)
+
+
+if __name__ == "__main__":
+    fucking_blockchain = Blockchain()
+    fucking_blockchain.add_block(Block(1, str(datetime.datetime.now()), 'Inane'))
+    fucking_blockchain.add_block(Block(2, str(datetime.datetime.now()), 'would like'))
+    fucking_blockchain.add_block(Block(3, str(datetime.datetime.now()), 'to fuck'))
+    fucking_blockchain.add_block(Block(4, str(datetime.datetime.now()), 'an asian girl'))
+
+    #fucking_blockchain.__dict__
+    result = fucking_blockchain.chain
+    print(result)
